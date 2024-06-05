@@ -1,0 +1,68 @@
+<% layout('layouts/boilerplate') %>
+    <form action="/cars/<%= car._id %>?_method=PUT" method="POST" class="validated-form" novalidate enctype="multipart/form-data">
+        <div class="row">
+            <h1 class="text-center text-info">Editing <%= car.make %> <%= car.model %></h1>
+            <div class="col-2 offset-2">
+                <div class="mb-3">
+                    <label class="form-label" for="make">Make</label>
+                    <input class="form-control" type="text" name="car[make]" id="make" value="<%= car.make %>" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" for="model">Model</label>
+                    <input class="form-control" type="text" name="car[model]" id="model" value="<%= car.model %>" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" for="VIN">VIN</label>
+                    <input class="form-control" type="text" name="car[VIN]" id="VIN" value="<%= car.VIN %>" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" for="year_model">Year Model</label>
+                    <input class="form-control" type="text" name="car[year_model]" id="year_model" value="<%= car.year_model %>" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" for="transmission">Transmission</label>
+                    <input class="form-control" type="text" name="car[transmission]" id="transmission" value="<%= car.transmission %>" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" for="fuel_type">Fuel Type</label>
+                    <input class="form-control" type="text" name="car[fuel_type]" id="fuel_type" value="<%= car.fuel_type %>" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" for="owner">Owner</label>
+                    <input class="form-control" type="text" name="car[owner]" id="owner" value="<%= car.owner %>" required>
+                </div>
+            </div>
+            <div class="col-2 offset-3">
+                <div class="mb-3">
+                    <label class="form-label text-danger" for="price">Price</label>
+                    <input class="form-control" type="number" name="car[price]" id="price" value="<%= car.price %>" required>
+                    <div class="valid-feedback">Looks good!</div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label text-danger" for="driven">Driven</label>
+                    <input class="form-control" type="number" name="car[driven]" id="driven" value="<%= car.driven %>" required>
+                    <div class="valid-feedback">Looks good!</div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label text-danger" for="email">Email</label>
+                    <input class="form-control" type="text" name="car[email]" id="email" value="<%= car.email %>" required>
+                    <div class="valid-feedback">Looks good!</div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label text-danger" for="phone_number">Phone Number</label>
+                    <input class="form-control" type="text" name="car[phone_number]" id="phone_number" value="<%= car.phone_number %>" required>
+                    <div class="valid-feedback">Looks good!</div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" for="images">Upload New Images</label>
+                    <input class="form-control" type="file" name="images" id="images" multiple>
+                </div>
+                <div class="mb-3">
+                    <button class="btn btn-success">Update Listing</button>
+                </div>
+                <div class="mb-3">
+                    <a href="/cars/<%= car._id%>"><button class="btn btn-danger">Cancel</button></a>
+                </div>
+            </div>
+        </div>
+    </form>
