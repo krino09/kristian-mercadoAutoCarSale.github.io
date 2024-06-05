@@ -1,0 +1,13 @@
+<% layout('layouts/boilerplate') %>
+
+    <div class="row mt-3">
+        <h1 class="text-center text-danger">Error</h1>
+        <div class="col-6 offset-3"></div> <!--make it center -->
+        <div class="alert alert-danger" role="alert">
+            <h4 class="alert-heading">
+                <%= err.message%>
+            </h4>
+            <p>
+                <%= err.stack %>
+            </p>
+        </div>
