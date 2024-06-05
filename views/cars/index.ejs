@@ -1,0 +1,89 @@
+<% layout('layouts/boilerplate') %>
+    <link rel="stylesheet" href="/stylesheets/style.css">
+
+    <div class="banner-container">
+        <img class="img-fluid banner-img"
+            src="https://www.budgetdirect.com.au/content/dam/budgetdirect/website-assets/2017/car/backgrounds/desktop/banner-car-sales-and-statistics-2024.jpg"
+            alt="banner-car-sales-and-statistics-2024">
+    </div>
+    <h1>
+        <%= cars.length %> cars for sale in Australia
+    </h1>
+    <div class="container mt-4">
+        <form action="/cars" method="GET" class="mb-4">
+            <div class="row">
+                <div class="col-md-3">
+                    <label for="sort" class="form-label">Sort by:</label>
+                    <select name="sort" id="sort" class="form-select">
+                        <option value="price-asc">Price: Low to High</option>
+                        <option value="price-desc">Price: High to Low</option>
+                        <option value="mileage-asc">Mileage: Low to High</option>
+                        <option value="mileage-desc">Mileage: High to Low</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label for="make" class="form-label">Make:</label>
+                    <select name="make" id="make" class="form-select">
+                        <option value="">All</option>
+                        <option value="Toyota">Toyota</option>
+                        <option value="Honda">Honda</option>
+                        <option value="Ford">Ford</option>
+                        <option value="Chevrolet">Chevrolet</option>
+                        <option value="Nissan">Nissan</option>
+                        <option value="BMW">BMW</option>
+                        <option value="Mercedes-Benz">Mercedes-Benz</option>
+                        <option value="Audi">Audi</option>
+                        <option value="Volkswagen">Volkswagen</option>
+                        <option value="Subaru">Subaru</option>
+                        <option value="Kia">Kia</option>
+                        <option value="Mazda">Mazda</option>
+                        <option value="Lexus">Lexus</option>
+                        <option value="Jeep">Jeep</option>
+                        <option value="GMC">GMC</option>
+                    </select>
+                </div>
+                <div class="col-md-3 align-self-end">
+                    <button type="submit" class="btn btn-primary">Apply</button>
+                </div>
+            </div>
+        </form>
+
+        <div class="row row-cols-1 md-2 g-4">
+            <% for(let car of cars) { %>
+                <div class="col">
+                    <div class="card h-100"
+                        style="width: 18rem; border: 1px solid rgb(190, 190, 190); border-radius: 20px;">
+                        <% if(car.images && car.images.length> 0) { %>
+                            <a href="/cars/<%= car.id %>">
+                                <img src="<%= car.images[0].url %>" class="card-img-top"
+                                    alt="<%= car.make %> <%= car.model %>" style="width: 287px; height: 200px;">
+                            </a>
+                            <% } else { %>
+                                <a href="/cars/<%= car.id %>">
+                                    <img src="https://res.cloudinary.com/dk0dr0gtw/image/upload/v1683127336/car_images/no-image-available.jpg"
+                                        class="card-img-top" alt="No image available">
+                                </a>
+                                <% } %>
+                                    <div class="card-body">
+                                        <h5 class="card-title">
+                                            <%= car.make %>
+                                                <%= car.model %>
+                                        </h5>
+                                        <p class="card-text">
+                                            <%= car.year_model %> - <%= car.transmission %> - <%= car.fuel_type %>
+                                        </p>
+                                        <p class="card-text">Driven: <%= car.driven %> miles</p>
+                                        
+                                    </div>
+                                    <ul class="list-group list-group-flush">
+                                        <li class="list-group-item">Price: $<%= car.price %>
+                                        </li>
+                                    </ul>
+                                    <div class="card-body text-center">
+                                        <a href="/cars/<%= car.id %>" class="card-link btn btn-primary">View Details</a>
+                                    </div>
+                    </div>
+                </div>
+                <% } %>
+        </div>
+    </div>
