@@ -1,0 +1,261 @@
+<% layout('layouts/boilerplate') %>
+    <link rel="stylesheet" href="/stylesheets/style.css">
+
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-md-8">
+                <h1 class="display-4">
+                    <%= car.make %>
+                        <%= car.model %>
+                            <%= car.year_model %>
+                </h1>
+                <h2 class="text-primary">$<%= car.price %>
+                </h2>
+
+                <div id="carCarousel" class="carousel slide" data-bs-ride="carousel">
+                    <div class="carousel-inner">
+                        <% car.images.forEach((img, i)=> { %>
+                            <div class="carousel-item <%= i === 0 ? 'active' : '' %>">
+                                <img src="<%= img.url %>" class="d-block w-100" alt="..."
+                                    style="border-radius: 20px; border: 2px solid rgb(19, 19, 19);">
+                                <% if (currentUser && car.author.equals(currentUser._id)) { %>
+                                    <button class="btn btn-danger btn-sm mt-3"
+                                        onclick="deleteImage('<%= car._id %>', '<%= img._id %>')">Delete Image</button>
+                                    <% } %>
+                            </div>
+                            <% }) %>
+                    </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#carCarousel"
+                        data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#carCarousel"
+                        data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </button>
+                </div>
+
+
+                <% if(!car.author || !(currentUser && car.author._id.equals(currentUser._id))){ %>
+                    <div class="mt-3">
+                        <button class="btn btn-success" onclick="openPopup()">Book a Test Drive</button>
+                    </div>
+                    <% } %>
+            </div>
+            <div class="col-md-4 ">
+                <div class="card mb-3" style="border: 1px solid rgb(190, 190, 190);">
+                    <div class="card-header">
+                        <h4 class="card-title">Car Details</h4>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item"><strong>Listed by:</strong>
+                            <%= car.author.username %>
+                        </li>
+                        <li class="list-group-item"><strong>Make:</strong>
+                            <%= car.make %>
+                        </li>
+                        <li class="list-group-item"><strong>Model:</strong>
+                            <%= car.model %>
+                        </li>
+                        <li class="list-group-item"><strong>VIN:</strong>
+                            <%= car.VIN %>
+                        </li>
+                        <li class="list-group-item"><strong>Year Model:</strong>
+                            <%= car.year_model %>
+                        </li>
+                        <li class="list-group-item"><strong>Transmission:</strong>
+                            <%= car.transmission %>
+                        </li>
+                        <li class="list-group-item"><strong>Fuel Type:</strong>
+                            <%= car.fuel_type %>
+                        </li>
+                        <li class="list-group-item"><strong>Driven:</strong>
+                            <%= car.driven %>
+                        </li>
+                        <li class="list-group-item"><strong>Owner:</strong>
+                            <%= car.owner %>
+                        </li>
+                        <li class="list-group-item"><strong>Phone Number:</strong>
+                            <%= car.phone_number %>
+                        </li>
+                        <li class="list-group-item"><strong>Email:</strong>
+                            <%= car.email %>
+                        </li>
+                    </ul>
+                    <% if(currentUser && car.author.equals(currentUser._id)){ %>
+                        <div class="card-body">
+                            <a href="/cars/<%= car._id %>/edit" class="btn btn-info">Edit</a>
+                            <form action="/cars/<%= car._id %>?_method=DELETE" method="POST" class="d-inline">
+                                <button type="submit" class="btn btn-danger">Delete Listing</button>
+                            </form>
+                        </div>
+                        <% } %>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-4">
+            <div class="col-md-8">
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <% if (car.reviews.length> 0) { %>
+                            <% let totalRating=car.reviews.reduce((acc, review)=> acc + review.rating, 0); %>
+                                <% let averageRating=totalRating / car.reviews.length; %>
+                                    <h3>Average Rating:</h3>
+                                    <div class="star-rating fs-3">
+                                        <% for (let i=5; i>= 1; i--) { %>
+                                            <span class="<%= i <= averageRating ? 'filled' : '' %>">&#9733;</span>
+                                            <% } %>
+                                    </div>
+                                    <% } %>
+
+                                        <% if(currentUser && !car.author._id.equals(currentUser._id)) { %>
+                                            <form action="/cars/<%= car.id %>/reviews" method="POST" class="mt-3"
+                                                onsubmit="return validateRating()">
+                                                <div class="mb-3">
+                                                    <label for="review[rating]" class="form-label">Rate this
+                                                        seller</label>
+                                                    <div class="star-rating">
+                                                        <input type="radio" id="star5" name="review[rating]" value="5">
+                                                        <label for="star5" title="5 stars">&#9733;</label>
+                                                        <input type="radio" id="star4" name="review[rating]" value="4">
+                                                        <label for="star4" title="4 stars">&#9733;</label>
+                                                        <input type="radio" id="star3" name="review[rating]" value="3">
+                                                        <label for="star3" title="3 stars">&#9733;</label>
+                                                        <input type="radio" id="star2" name="review[rating]" value="2">
+                                                        <label for="star2" title="2 stars">&#9733;</label>
+                                                        <input type="radio" id="star1" name="review[rating]" value="1">
+                                                        <label for="star1" title="1 star">&#9733;</label>
+                                                    </div>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="body" class="form-label">Write a review</label>
+                                                    <textarea class="form-control" name="review[body]" id="body"
+                                                        cols="30" rows="3"></textarea>
+                                                </div>
+                                                <button type="submit" class="btn btn-success">Submit</button>
+                                            </form>
+                                            <% } %>
+
+                                                <% for(let review of car.reviews) { %>
+                                                    <div class="mb-3">
+                                                        <p><strong>Rating:</strong></p>
+                                                        <div class="star-rating fs-3">
+                                                            <% for (let i=5; i>= 1; i--) { %>
+                                                                <span
+                                                                    class="<%= i <= review.rating ? 'filled' : '' %>">&#9733;</span>
+                                                                <% } %>
+                                                        </div>
+                                                        <p><strong>Review:</strong>
+                                                            <%= review.body %>
+                                                        </p>
+                                                        <p><strong>Submitted by:</strong>
+                                                            <%= review.author.username %>
+                                                        </p>
+                                                        <% if (currentUser &&
+                                                            review.author._id.toString()===currentUser._id.toString()) {
+                                                            %>
+                                                            <form
+                                                                action="/cars/<%= car._id %>/reviews/<%= review._id %>?_method=DELETE"
+                                                                method="POST">
+                                                                <button class="btn btn-sm btn-danger">Delete</button>
+                                                            </form>
+                                                            <% } %>
+                                                    </div>
+                                                    <% } %>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Popup modal -->
+        <div id="popupModal" class="modal" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Book a Test Drive</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="testDriveForm" action="/submit-form" method="POST">
+                            <div class="mb-3">
+                                <label for="name" class="form-label">Name</label>
+                                <input type="text" id="name" name="name" class="form-control" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Email</label>
+                                <input type="email" id="email" name="email" class="form-control" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="phone" class="form-label">Phone</label>
+                                <input type="tel" id="phone" name="phone" class="form-control" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="date" class="form-label">Preferred Date</label>
+                                <input type="date" id="date" name="date" class="form-control" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function openPopup() {
+            const modal = new bootstrap.Modal(document.getElementById('popupModal'));
+            modal.show();
+        }
+
+        function validateRating() {
+            const ratingInputs = document.querySelectorAll('input[name="review[rating]"]');
+            let ratingSelected = false;
+
+            ratingInputs.forEach(input => {
+                if (input.checked) {
+                    ratingSelected = true;
+                }
+            });
+
+            if (!ratingSelected) {
+                alert('Please select a rating before submitting.');
+                return false; // Prevent form submission
+            }
+
+            const reviewBody = document.getElementById('body').value.trim(); // Get the review body and remove leading/trailing whitespace
+
+            if (reviewBody === '') {
+                alert('Please write a review before submitting.');
+                return false; // Prevent form submission
+            }
+
+            return true; // Allow form submission
+        }
+        async function deleteImage(productId, imageId) {
+        if (!confirm('Are you sure you want to delete this image?')) return;
+
+        try {
+            const response = await fetch(`/cars/${productId}/images/${imageId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                }
+            });
+
+            const result = await response.json();
+            if (response.ok) {
+                alert(result.message); // Show success message
+                location.reload(); // Reload the page to reflect the changes
+            } else {
+                alert(`Error: ${result.message}`); // Show error message
+            }
+        } catch (error) {
+            console.error('Fetch error:', error);
+            alert('An error occurred while deleting the image.');
+        }
+    }
+    </script>
