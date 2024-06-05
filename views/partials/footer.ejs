@@ -1,0 +1,40 @@
+<link rel="stylesheet" href="/stylesheets/style.css">
+<div class="footer py-3 mt-auto">
+    <div class="footer__link">
+        <a href="https://www.facebook.com/IvanaAlawi" target="_blank">
+            <img src="/assets/logo/facebook.png" class="footer__icon" alt="Facebook">
+        </a>
+        <a href="https://twitter.com/yourhandle" target="_blank">
+            <img src="/assets/logo/tik-tok.png" class="footer__icon" alt="Twitter">
+        </a>
+        <a href="https://www.instagram.com/youraccount" target="_blank">
+            <img src="/assets/logo/instagram.png" class="footer__icon" alt="Instagram">
+        </a>
+    </div>
+    <button class="btn btn-primary contact-us-btn" onclick="openContactPopup()">Contact Us</button>
+    <p class="footer__right">&copy; 2024 Auto Car Sale. All rights reserved.</p>
+</div>
+
+=<div id="contactPopup" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeContactPopup()">&times;</span>
+        <h3>Contact Us</h3>
+        <p>Email: <a href="mailto:13923182@aias.edu.au">13923182@aias.edu.au</a>
+        </p>
+        <p>Phone: +61 (7) 3343 8073</p>
+        <p>Address: Building "L"
+            1030 Cavendish Rd
+            Mount Gravatt East
+            Queensland 4122</p>
+    </div>
+</div>
+
+<script>
+    function openContactPopup() {
+        document.getElementById('contactPopup').style.display = 'block';
+    }
+
+    function closeContactPopup() {
+        document.getElementById('contactPopup').style.display = 'none';
+    }
+</script>
